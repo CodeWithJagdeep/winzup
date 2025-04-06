@@ -8,7 +8,13 @@ const corsMiddleware = (
   next: NextFunction
 ): void => {
   const corsOptions = {
-    origin: ["https://winzupp.com/", "https://panel.winzupp.com/"], // Allow specific origin(s) or all origins
+    origin: [
+      "https://winzupp.com",
+      "https://winzupp.com/",
+      "https://panel.winzupp.com/",
+      "https://panel.winzupp.com",
+      "http://localhost:5173",
+    ], // Allow specific origin(s) or all origins
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Allowed HTTP methods
     allowedHeaders: "Content-Type,Authorization,ngrok-skip-browser-warning", // Allowed headers
     credentials: true, // Whether to allow credentials (cookies, etc.)
