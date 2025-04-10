@@ -10,7 +10,11 @@ const corsMiddleware = (
   const corsOptions = {
     origin: [
       "https://winzupp.com",
+      "http://winzupp.com",
       "https://winzupp.com/",
+      "http://winzupp.com/",
+      "https://www.winzupp.com/",
+      "https://www.winzupp.com",
       "https://panel.winzupp.com/",
       "https://panel.winzupp.com",
     ], // Allow specific origin(s) or all origins
