@@ -154,12 +154,13 @@ class EventController {
   }
 
   async selectedAnswer(req: Request, res: Response): Promise<any> {
-    const { questionid, userid, answerId, point } = req.body;
+    const { questionid, userid, answerId, point, eventid } = req.body;
 
     try {
       const answer = await Answer.findOne({
         questionId: questionid,
         userid: userid,
+        eventid: eventid,
       });
 
       if (answer) {
@@ -170,6 +171,7 @@ class EventController {
         await Answer.create({
           questionId: questionid,
           answerId: answerId,
+          eventid: eventid,
           userid: userid,
           point: point,
         });
