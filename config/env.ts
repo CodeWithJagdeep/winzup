@@ -33,6 +33,10 @@ export const RAZORPAY_KEY_ID: string | undefined = process.env.RAZORPAY_KEY_ID; 
 export const RAZORPAY_KEY_SECRET: string | undefined =
   process.env.RAZORPAY_KEY_SECRET; // JWT token expiry time
 
+export const PROD_RAZORPAY_KEY_ID: string | undefined = process.env.PROD_RAZORPAY_KEY_ID; // Secret key for JWT
+export const PROD_RAZORPAY_KEY_SECRET: string | undefined =
+  process.env.PROD_RAZORPAY_KEY_SECRET; // JWT token expiry time
+
 // -------------------------------
 // Mail Configuration
 // -------------------------------

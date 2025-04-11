@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import crypto from "crypto";
-import { RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET } from "../config/env";
+import {
+  PROD_RAZORPAY_KEY_ID,
+  PROD_RAZORPAY_KEY_SECRET,
+  RAZORPAY_KEY_ID,
+  RAZORPAY_KEY_SECRET,
+} from "../config/env";
 import { User } from "../models/User";
 import Razorpay from "razorpay";
 import Transaction from "../models/Transcation";
@@ -11,8 +16,8 @@ class PaymentControler {
   instance: Razorpay;
 
   constructor() {
-    this.clientid = RAZORPAY_KEY_ID || "";
-    this.clientSecret = RAZORPAY_KEY_SECRET || "";
+    this.clientid = PROD_RAZORPAY_KEY_ID || "";
+    this.clientSecret = PROD_RAZORPAY_KEY_SECRET || "";
 
     if (!this.clientid || !this.clientSecret) {
       throw new Error(
