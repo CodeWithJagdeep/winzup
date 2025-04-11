@@ -155,7 +155,7 @@ class EventController {
 
   async selectedAnswer(req: Request, res: Response): Promise<any> {
     const { questionid, userid, answerId, point, eventid } = req.body;
-
+    console.log(questionid, userid, answerId, point, eventid);
     try {
       const answer = await Answer.findOne({
         questionId: questionid,

@@ -26,8 +26,8 @@ class PaymentControler {
     }
 
     this.instance = new Razorpay({
-      key_id: RAZORPAY_KEY_ID,
-      key_secret: RAZORPAY_KEY_SECRET,
+      key_id: PROD_RAZORPAY_KEY_ID,
+      key_secret: PROD_RAZORPAY_KEY_SECRET,
     });
     this.createOrder = this.createOrder.bind(this);
   }
@@ -93,7 +93,7 @@ class PaymentControler {
 
       // Verify Razorpay signature
       const expectedSignature = crypto
-        .createHmac("sha256", RAZORPAY_KEY_SECRET as string)
+        .createHmac("sha256", PROD_RAZORPAY_KEY_SECRET as string)
         .update(razorpay_order_id + "|" + razorpay_payment_id)
         .digest("hex");
 
