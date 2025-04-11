@@ -14,6 +14,9 @@ const AnswerSchema = new Schema(
     point: {
       type: Number,
     },
+    eventid: {
+      type: mongoose.Types.ObjectId,
+    },
     answerId: {
       type: Types.ObjectId,
       required: true,

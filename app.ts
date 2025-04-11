@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import hpp from "hpp";
 import AuthRouter from "./routes/AuthRouter";
 import QuestionRouter from "./routes/QuestionRouter";
+import AnswerRouter from "./routes/AnswerRouter";
 import PaymentRouter from "./routes/Paymentrouter";
 import EventRouter from "./routes/EventRouter";
 import path from "path";
@@ -56,7 +57,7 @@ app.use("/api/user", AuthRouter);
 app.use("/api/payment", PaymentRouter);
 app.use("/api/event", EventRouter);
 app.use("/api/question", QuestionRouter);
-app.use("/api/answer", QuestionRouter);
+app.use("/api/answer", AnswerRouter);
 
 app.get("/", (req, res) => {
   const userIp =
