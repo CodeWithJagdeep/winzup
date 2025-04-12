@@ -6,6 +6,7 @@ const router: Router = Router();
 
 router.route("/create").post(QuestionController.create);
 router.route("/").get(QuestionController.getQuestions);
-router.route("/submit").post(EventController.selectedAnswer);
+;
+router.route("/correct/submit").post(QuestionController.CorrectAnswer);
 
 export default router;

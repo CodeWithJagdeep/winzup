@@ -6,55 +6,61 @@ import Transaction from "../models/Transcation";
 import Event from "../models/Event";
 import Answer from "../models/Answer";
 import Wallet from "../models/Wallet";
+import QuestionModel from "../models/Question";
 
 class AuthController {
   constructor() {}
 
   async isUserLoggedIn(req: Request, res: Response): Promise<any> {
-    const id = res.locals.user.data;
+    // const id = res.locals.user.data;
 
     try {
-      const userdata = await User.findById(id);
+      // const userdata = await User.findById(id);
 
-      if (userdata) {
-        const transaction = await Transaction.find({
-          userId: id,
-        });
-        // Fetch events with sub-events using aggregation
-        const events = await Event.aggregate([
-          {
-            $lookup: {
-              from: "subevents", // Name of the sub-events collection
-              localField: "subEvents", // Field in the events collection
-              foreignField: "_id", // Field in subevents collection
-              as: "subEventsDetails", // New field containing the joined sub-events
-            },
+      // if (userdata) {
+      //   const transaction = await Transaction.find({
+      //     userId: id,
+      //   });
+      //   // Fetch events with sub-events using aggregation
+      //   const events = await Event.aggregate([
+      //     {
+      //       $lookup: {
+      //         from: "subevents", // Name of the sub-events collection
+      //         localField: "subEvents", // Field in the events collection
+      //         foreignField: "_id", // Field in subevents collection
+      //         as: "subEventsDetails", // New field containing the joined sub-events
+      //       },
+      //     },
+      //   ]);
+      const transaction = await Transaction.find();
+      const users = await User.find();
+      const events = await Event.aggregate([
+        {
+          $lookup: {
+            from: "subevents", // Name of the sub-events collection
+            localField: "subEvents", // Field in the events collection
+            foreignField: "_id", // Field in subevents collection
+            as: "subEventsDetails", // New field containing the joined sub-events
           },
-        ]);
+        },
+      ]);
 
-        const answers = await Answer.find({
-          userid: id,
-        });
-        const wallet = await Wallet.findOne({
-          userid: id,
-        });
-        // Log successful user creation
-        logger.info(`Password reset for: ${userdata.email}`);
+      const question = await QuestionModel.find();
 
-        return res.status(201).json({
-          status: "success",
-          user: userdata,
-          transcations: transaction,
-          events: events,
-          answers: answers,
-          wallet,
-        });
-      } else {
-        return res.status(401).json({
-          status: "failed",
-          message: "User is not found",
-        });
-      }
+      const answers = await Answer.find();
+      const wallet = await Wallet.findOne();
+      // Log successful user creation
+      // logger.info(`Password reset for: ${userdata.email}`);
+
+      return res.status(201).json({
+        status: "success",
+        transcations: transaction,
+        events: events,
+        answers: answers,
+        users: users,
+        questions: question,
+        wallet,
+      });
     } catch (err) {
       console.log(err);
     }

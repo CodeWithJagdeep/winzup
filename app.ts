@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import hpp from "hpp";
 import AuthRouter from "./routes/AuthRouter";
 import QuestionRouter from "./routes/QuestionRouter";
+import AnswerRouter from "./routes/AnswerRouter";
 import PaymentRouter from "./routes/Paymentrouter";
 import EventRouter from "./routes/EventRouter";
 import path from "path";
@@ -16,6 +17,7 @@ import { connectDB } from "./config/mongoConfig";
 import rateLimitMiddleware from "./middlewares/rateLimiter";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import corsMiddleware from "./middlewares/corsMiddleware";
+import keepAlive from "./utils/keepAlive";
 
 connectDB();
 
@@ -56,7 +58,7 @@ app.use("/api/user", AuthRouter);
 app.use("/api/payment", PaymentRouter);
 app.use("/api/event", EventRouter);
 app.use("/api/question", QuestionRouter);
-app.use("/api/answer", QuestionRouter);
+app.use("/api/answer", AnswerRouter);
 
 app.get("/", (req, res) => {
   const userIp =
@@ -68,6 +70,7 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));
 });
 
+keepAlive();
 // Global error handling middleware
 app.use(globalErrorHandler);
 

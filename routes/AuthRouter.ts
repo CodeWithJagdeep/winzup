@@ -11,7 +11,7 @@ router
   .get(AuthController.UserVerification);
 router.route("/social").post(AuthController.socialLogin);
 router.route("/create").post(AuthController.createUser);
-router.route("/isloggedin").get(authMiddleware, AuthController.isUserLoggedIn);
+router.route("/isloggedin").get(AuthController.isUserLoggedIn);
 router
   .route("/wallet/verification")
   .post(authMiddleware, AuthController.walletVerification);
