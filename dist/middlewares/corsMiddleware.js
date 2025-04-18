@@ -4,12 +4,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
-const env_1 = require("../config/env");
 const corsMiddleware = (req, res, next) => {
     const corsOptions = {
-        origin: env_1.ALLOWED_ORIGINS, // Allow specific origin(s) or all origins
+        origin: [
+            "https://winzupp.com",
+            "http://winzupp.com",
+            "http://localhost:5173",
+            "https://winzupp.com/",
+            "http://winzupp.com/",
+            "https://www.winzupp.com/",
+            "https://www.winzupp.com",
+            "https://panel.winzupp.com/",
+            "https://panel.winzupp.com",
+        ], // Allow specific origin(s) or all origins
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Allowed HTTP methods
-        allowedHeaders: "Content-Type,Authorization", // Allowed headers
+        allowedHeaders: "Content-Type,Authorization,ngrok-skip-browser-warning", // Allowed headers
         credentials: true, // Whether to allow credentials (cookies, etc.)
         preflightContinue: false, // Whether to pass the CORS request to the next handler
         optionsSuccessStatus: 204, // Some legacy browsers (IE11) choke on 204

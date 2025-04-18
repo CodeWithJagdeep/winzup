@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TIMEZONE = exports.APP_NAME = exports.THIRD_PARTY_API_KEY = exports.LOG_LEVEL = exports.ALLOWED_ORIGINS = exports.MAIL_FROM_ADDRESS = exports.MAIL_FROM_NAME = exports.MAIL_PASSWORD = exports.MAIL_USERNAME = exports.MAIL_PORT = exports.MAIL_HOST = exports.RAZORPAY_KEY_SECRET = exports.RAZORPAY_KEY_ID = exports.TEST_PAYMENT_SECRET = exports.TEST_PAYMENT_ID = exports.JWT_EXPIRES_IN = exports.JWT_SECRET = exports.DATABASE_URL = exports.BASE_API_URL = exports.DOCKER_ENV = exports.NODE_ENV = exports.PORT = void 0;
+exports.TIMEZONE = exports.APP_NAME = exports.THIRD_PARTY_API_KEY = exports.LOG_LEVEL = exports.ALLOWED_ORIGINS = exports.MAIL_FROM_ADDRESS = exports.MAIL_FROM_NAME = exports.MAIL_PASSWORD = exports.MAIL_USERNAME = exports.MAIL_PORT = exports.MAIL_HOST = exports.PROD_RAZORPAY_KEY_SECRET = exports.PROD_RAZORPAY_KEY_ID = exports.RAZORPAY_KEY_SECRET = exports.RAZORPAY_KEY_ID = exports.TEST_PAYMENT_SECRET = exports.TEST_PAYMENT_ID = exports.JWT_EXPIRES_IN = exports.JWT_SECRET = exports.DATABASE_URL = exports.BASE_API_URL = exports.DOCKER_ENV = exports.NODE_ENV = exports.PORT = void 0;
 const dotenv_1 = require("dotenv");
 // Load environment variables from .env file
 (0, dotenv_1.config)();
@@ -27,6 +27,8 @@ exports.TEST_PAYMENT_ID = process.env.AppID_Test; // Secret key for JWT
 exports.TEST_PAYMENT_SECRET = process.env.Secret_key_Test; // JWT token expiry time
 exports.RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID; // Secret key for JWT
 exports.RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET; // JWT token expiry time
+exports.PROD_RAZORPAY_KEY_ID = process.env.PROD_RAZORPAY_KEY_ID; // Secret key for JWT
+exports.PROD_RAZORPAY_KEY_SECRET = process.env.PROD_RAZORPAY_KEY_SECRET; // JWT token expiry time
 // -------------------------------
 // Mail Configuration
 // -------------------------------

@@ -19,14 +19,14 @@ const razorpay_1 = __importDefault(require("razorpay"));
 const Transcation_1 = __importDefault(require("../models/Transcation"));
 class PaymentControler {
     constructor() {
-        this.clientid = env_1.RAZORPAY_KEY_ID || "";
-        this.clientSecret = env_1.RAZORPAY_KEY_SECRET || "";
+        this.clientid = env_1.PROD_RAZORPAY_KEY_ID || "";
+        this.clientSecret = env_1.PROD_RAZORPAY_KEY_SECRET || "";
         if (!this.clientid || !this.clientSecret) {
             throw new Error("Cashfree credentials are missing. Check your environment variables.");
         }
         this.instance = new razorpay_1.default({
-            key_id: env_1.RAZORPAY_KEY_ID,
-            key_secret: env_1.RAZORPAY_KEY_SECRET,
+            key_id: env_1.PROD_RAZORPAY_KEY_ID,
+            key_secret: env_1.PROD_RAZORPAY_KEY_SECRET,
         });
         this.createOrder = this.createOrder.bind(this);
     }
@@ -70,12 +70,12 @@ class PaymentControler {
     // ✅ 2️⃣ Verify Payment & Update Transaction Status
     verifyPayment(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { razorpayPaymentId, razorpayOrderId, razorpaySignature } = req.body;
-            console.log(razorpayPaymentId, razorpayOrderId, razorpaySignature);
+            const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+            console.log(razorpay_order_id, razorpay_payment_id, razorpay_signature);
             try {
                 // Find transaction by order ID
                 const transaction = yield Transcation_1.default.findOne({
-                    "pendingDetails.razorpayOrderId": razorpayOrderId,
+                    "pendingDetails.razorpayOrderId": razorpay_order_id,
                 });
                 if (!transaction) {
                     return res
@@ -84,18 +84,19 @@ class PaymentControler {
                 }
                 // Verify Razorpay signature
                 const expectedSignature = crypto_1.default
-                    .createHmac("sha256", env_1.RAZORPAY_KEY_SECRET)
-                    .update(razorpayOrderId + "|" + razorpayPaymentId)
+                    .createHmac("sha256", env_1.PROD_RAZORPAY_KEY_SECRET)
+                    .update(razorpay_order_id + "|" + razorpay_payment_id)
                     .digest("hex");
-                if (expectedSignature !== razorpaySignature) {
+                if (expectedSignature !== razorpay_signature) {
+                    // ✅ FIXED: Compare with razorpay_signature
                     return res
                         .status(400)
                         .json({ status: "failed", message: "Invalid signature." });
                 }
                 // Update transaction status
                 transaction.status = "captured";
-                transaction.razorpayPaymentId = razorpayPaymentId;
-                transaction.razorpaySignature = razorpaySignature;
+                transaction.razorpayPaymentId = razorpay_payment_id;
+                transaction.razorpaySignature = razorpay_signature;
                 transaction.pendingDetails = undefined; // Remove pending details after success
                 const userData = yield User_1.User.findOne({ _id: transaction.userId });
                 if (userData) {

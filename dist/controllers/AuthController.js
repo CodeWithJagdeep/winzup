@@ -52,7 +52,7 @@ class AuthController {
                     return res.status(201).json({
                         status: "success",
                         user: userdata,
-                        transcations: transaction,
+                        transactions: transaction,
                         events: events,
                         answers: answers,
                         wallet,

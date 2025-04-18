@@ -44,15 +44,20 @@ const AnswerSchema = new mongoose_1.Schema({
     userid: {
         type: mongoose_1.default.Types.ObjectId,
     },
+    point: {
+        type: Number,
+    },
+    eventid: {
+        type: mongoose_1.default.Types.ObjectId,
+    },
     answerId: {
         type: mongoose_1.Types.ObjectId,
         required: true,
         ref: "Answer", // Reference to Answer model
     },
     correct: {
-        type: mongoose_1.Types.ObjectId,
+        type: Boolean,
         default: false,
-        ref: "Answer", // Reference to Answer model (if applicable)
     },
 }, { timestamps: true });
 // Define Model

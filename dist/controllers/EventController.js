@@ -22,12 +22,12 @@ class EventController {
             const { eventTitle, startTime, location, matchDetails, subEvents } = req.body;
             try {
                 // Validate required fields
-                if (!eventTitle || !startTime) {
+                if (!eventTitle) {
                     return res.status(400).json({ message: "Missing required fields" });
                 }
                 yield Event_1.default.create({
                     eventname: eventTitle,
-                    startTime: new Date(startTime), // Convert string to Date object
+                    startTime: startTime, // Convert string to Date object
                     location: location,
                     matchDetails: matchDetails,
                     subEvents: subEvents,
@@ -112,9 +112,10 @@ class EventController {
                 // Add user to event participants and save event
                 currentEvent.participants.push(userid);
                 yield event.save();
+                const events = yield Event_1.default.find();
                 return res.status(201).json({
                     status: "success",
-                    data: event,
+                    events: events,
                     user: user,
                 });
             }
@@ -135,12 +136,6 @@ class EventController {
                     _id: eventid,
                 });
                 if (getEvent) {
-                    // const getSubevent = await SubEvent.create({
-                    //   eventname: subeventName,
-                    //   eventFee: eventFee,
-                    //   startTime: startTime,
-                    // });
-                    // getEvent.subEvents.push(getSubevent._id);
                     yield getEvent.save();
                     return res.status(201).json({
                         message: "success",
@@ -164,32 +159,31 @@ class EventController {
     }
     selectedAnswer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { questionid, userid, answerId } = req.body;
+            const { questionid, userid, answerId, point, eventid } = req.body;
+            console.log(questionid, userid, answerId, point, eventid);
             try {
-                const question = yield Answer_1.default.findOne({
+                const answer = yield Answer_1.default.findOne({
                     questionId: questionid,
                     userid: userid,
+                    eventid: eventid,
                 });
-                if (question) {
-                    question.answerId = answerId;
-                    yield question.save();
-                    const allAnswers = yield Answer_1.default.find({
+                if (answer) {
+                    answer.answerId = answerId;
+                    answer.point = point;
+                    yield answer.save();
+                }
+                else {
+                    yield Answer_1.default.create({
+                        questionId: questionid,
+                        answerId: answerId,
+                        eventid: eventid,
                         userid: userid,
-                    });
-                    return res.status(201).json({
-                        status: "success",
-                        answers: allAnswers,
+                        point: point,
                     });
                 }
-                yield Answer_1.default.create({
-                    questionId: questionid,
-                    answerId: answerId,
-                    userid: userid,
-                });
-                const allAnswers = yield Answer_1.default.find({
-                    userid: userid,
-                });
-                return res.status(201).json({
+                // Fetch all answers once
+                const allAnswers = yield Answer_1.default.find({ userid: userid });
+                return res.status(200).json({
                     status: "success",
                     answers: allAnswers,
                 });

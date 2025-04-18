@@ -11,6 +11,7 @@ const corsMiddleware = (
     origin: [
       "https://winzupp.com",
       "http://winzupp.com",
+      "http://localhost:5173",
       "https://winzupp.com/",
       "http://winzupp.com/",
       "https://www.winzupp.com/",

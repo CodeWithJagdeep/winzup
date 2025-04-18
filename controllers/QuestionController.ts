@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import QuestionModel from "../models/Question";
 import Answer from "../models/Answer";
 import mongoose from "mongoose";
+import axios from "axios";
 
 class QuestionController {
   constructor() {}
@@ -47,11 +48,19 @@ class QuestionController {
     const { eventid } = req.body;
     try {
       const userAnswers = await Answer.aggregate([
-        { $match: { eventid: new mongoose.Types.ObjectId(eventid) } }, // Filter by eventId if needed
+        {
+          $match: {
+            eventid: new mongoose.Types.ObjectId(eventid),
+          },
+        }, // Filter by eventId if needed
         {
           $group: {
             _id: "$userid", // Group by user ID
-            totalPoints: { $sum: "$point" }, // Sum points per user
+            totalPoints: {
+              $sum: {
+                $cond: [{ $eq: ["$correct", true] }, "$point", 0],
+              },
+            },
             answers: { $push: "$$ROOT" }, // Collect all answers for each user
           },
         },
@@ -67,10 +76,17 @@ class QuestionController {
         { $sort: { totalPoints: -1 } }, // Sort by total points in descending order
       ]);
 
-      console.log(userAnswers);
+      const botResponse: any = await axios.post(
+        `http://localhost:8000/api/answer/get/bot?limit=${100}`,
+        {
+          userAnswers,
+          subeventid: eventid,
+        }
+      );
+      console.log(botResponse.data);
       return res.status(201).json({
         status: "success",
-        leaderboard: userAnswers,
+        leaderboard: botResponse.data.data,
       });
     } catch (err) {
       console.error(err);

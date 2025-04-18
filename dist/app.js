@@ -12,6 +12,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const hpp_1 = __importDefault(require("hpp"));
 const AuthRouter_1 = __importDefault(require("./routes/AuthRouter"));
 const QuestionRouter_1 = __importDefault(require("./routes/QuestionRouter"));
+const AnswerRouter_1 = __importDefault(require("./routes/AnswerRouter"));
 const Paymentrouter_1 = __importDefault(require("./routes/Paymentrouter"));
 const EventRouter_1 = __importDefault(require("./routes/EventRouter"));
 const path_1 = __importDefault(require("path"));
@@ -34,9 +35,9 @@ app.use(corsMiddleware_1.default);
 if (process.env.NODE_ENV === "development") {
     app.use((0, morgan_1.default)("dev"));
 }
-// Middleware: Body parsers (JSON and URL-encoded data)
-app.use(express_1.default.json({ limit: "10kb" }));
-app.use(express_1.default.urlencoded({ extended: true, limit: "10kb" }));
+// Increase request payload limit
+app.use(body_parser_1.default.json({ limit: "10mb" })); // Increase limit to 10MB
+app.use(body_parser_1.default.urlencoded({ limit: "10mb", extended: true }));
 app.use(body_parser_1.default.json());
 // Middleware: Cookie parser
 app.use((0, cookie_parser_1.default)());
@@ -48,7 +49,7 @@ app.use("/api/user", AuthRouter_1.default);
 app.use("/api/payment", Paymentrouter_1.default);
 app.use("/api/event", EventRouter_1.default);
 app.use("/api/question", QuestionRouter_1.default);
-app.use("/api/answer", QuestionRouter_1.default);
+app.use("/api/answer", AnswerRouter_1.default);
 app.get("/", (req, res) => {
     var _a;
     const userIp = ((_a = req.headers["x-forwarded-for"]) === null || _a === void 0 ? void 0 : _a.toString().split(",")[0]) || req.ip;

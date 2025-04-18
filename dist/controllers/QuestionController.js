@@ -13,6 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Question_1 = __importDefault(require("../models/Question"));
+const Answer_1 = __importDefault(require("../models/Answer"));
+const mongoose_1 = __importDefault(require("mongoose"));
 class QuestionController {
     constructor() { }
     create(req, res, next) {
@@ -29,6 +31,7 @@ class QuestionController {
                 });
             }
             catch (err) {
+                console.log(err);
                 return res.status(401).json({
                     status: "failed",
                 });
@@ -42,14 +45,54 @@ class QuestionController {
                 const response = yield Question_1.default.find({
                     eventId: eventid,
                 });
+                console.log(response);
                 return res.status(201).json({
-                    status: "failed",
+                    status: "success",
                     data: response,
                 });
             }
             catch (err) {
                 return res.status(401).json({
                     status: "failed",
+                });
+            }
+        });
+    }
+    LeaderBoard(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { eventid } = req.body;
+            try {
+                const userAnswers = yield Answer_1.default.aggregate([
+                    { $match: { eventid: new mongoose_1.default.Types.ObjectId(eventid) } }, // Filter by eventId if needed
+                    {
+                        $group: {
+                            _id: "$userid", // Group by user ID
+                            totalPoints: { $sum: "$point" }, // Sum points per user
+                            answers: { $push: "$$ROOT" }, // Collect all answers for each user
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "users", // The name of the users collection
+                            localField: "_id",
+                            foreignField: "_id",
+                            as: "userDetails",
+                        },
+                    },
+                    { $unwind: "$userDetails" }, // Unwind the array to get a single object
+                    { $sort: { totalPoints: -1 } }, // Sort by total points in descending order
+                ]);
+                console.log(userAnswers);
+                return res.status(201).json({
+                    status: "success",
+                    leaderboard: userAnswers,
+                });
+            }
+            catch (err) {
+                console.error(err);
+                return res.status(500).json({
+                    status: "failed",
+                    error: err || "Internal Server Error",
                 });
             }
         });

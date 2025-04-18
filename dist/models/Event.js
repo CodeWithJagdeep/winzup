@@ -37,7 +37,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const EventSchema = new mongoose_1.Schema({
     eventname: { type: String, required: true },
     eventstatus: { type: Boolean, default: true },
-    startTime: { type: Date, required: true }, // Start time is now required
+    startTime: { type: String }, // Start time is now required
     location: { type: String, required: true }, // Added location
     matchDetails: [
         {
