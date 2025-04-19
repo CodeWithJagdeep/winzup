@@ -35,6 +35,7 @@ class AuthController {
         const answers = await Answer.find({
           userid: id,
         });
+
         const wallet = await Wallet.findOne({
           userid: id,
         });
@@ -314,15 +315,17 @@ class AuthController {
 
   async walletVerification(req: Request, res: Response): Promise<any> {
     const id = res.locals.user.data;
-    const { banknumber, ifsc } = req.body;
+    const { panNumber, banknumber, ifsc, accountHolderName } = req.body;
 
     try {
       const wallet = await Wallet.findOne({
         userid: id,
       });
+
       if (wallet) {
         wallet.bankNumber = banknumber;
         wallet.Ifsc = ifsc;
+        wallet.accountHolderName = accountHolderName;
         await wallet.save();
         return res.status(201).json({
           status: "success",
@@ -332,6 +335,9 @@ class AuthController {
       await Wallet.create({
         bankNumber: banknumber,
         Ifsc: ifsc,
+        panNumber: panNumber,
+        accountHolderName: accountHolderName,
+        userid: id,
       });
       return res.status(201).json({
         status: "success",

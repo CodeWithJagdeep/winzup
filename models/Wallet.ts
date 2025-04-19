@@ -6,11 +6,19 @@ interface IWallet extends Document {
   Ifsc?: string;
   verified?: boolean;
   userid: Types.ObjectId;
+  accountHolderName: string;
+  panNumber: string;
 }
 
 // Define the Wallet schema
 const walletSchema = new Schema<IWallet>({
   bankNumber: {
+    type: String,
+  },
+  accountHolderName: {
+    type: String,
+  },
+  panNumber: {
     type: String,
   },
   Ifsc: {
